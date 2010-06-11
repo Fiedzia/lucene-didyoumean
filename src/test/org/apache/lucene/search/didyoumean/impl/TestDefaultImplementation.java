@@ -15,12 +15,10 @@ package org.apache.lucene.search.didyoumean.impl;
  *
  */
 
-
-
 import junit.framework.TestCase;
-import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.search.didyoumean.secondlevel.token.TermTokenPhraseSuggester;
+import org.apache.lucene.search.didyoumean.secondlevel.token.TokenPhraseSuggester;
 import org.apache.lucene.search.didyoumean.session.QueryGoalNode;
-import org.apache.lucene.search.didyoumean.Suggester;
 import org.apache.lucene.search.didyoumean.Suggestion;
 import org.apache.lucene.search.didyoumean.SuggestionFacade;
 import org.apache.lucene.search.didyoumean.dictionary.MemoryDictionary;
@@ -32,10 +30,7 @@ import org.apache.lucene.index.facade.DirectoryIndexFacade;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.analysis.WhitespaceAnalyzer;
 import org.apache.lucene.search.didyoumean.session.MemoryQuerySessionManager;
-import org.apache.lucene.search.didyoumean.session.QueryGoalTreeExtractor;
 import org.apache.lucene.store.RAMDirectory;
-
-import java.io.File;
 
 /**
  * @author Karl Wettin <mailto:karl.wettin@gmail.com>
@@ -49,7 +44,13 @@ public class TestDefaultImplementation extends TestCase {
   @Override
   protected void setUp() throws Exception {
 
-    suggestionFacade = new SuggestionFacade<Integer>(new MemoryDictionary(), new MemoryQuerySessionManager<Integer>(), new DefaultSuggester(), new DefaultTrainer(), new DefaultQueryGoalTreeExtractor<Integer>(), new DefaultAprioriCorpusFactory());
+    suggestionFacade =
+            new SuggestionFacade<Integer>(new MemoryDictionary(),
+                                          new MemoryQuerySessionManager<Integer>(),
+                                          new DefaultSuggester(),
+                                          new DefaultTrainer(),
+                                          new DefaultQueryGoalTreeExtractor<Integer>(),
+                                          new DefaultAprioriCorpusFactory());
 
     // your primary index that suggestions must match.
     IndexFacade aprioriIndex = new DirectoryIndexFacade(new RAMDirectory());
@@ -68,7 +69,11 @@ public class TestDefaultImplementation extends TestCase {
     int maxSuggestionsPerToken = 3;
 
     // add ngram suggester wrapped in a single token phrase suggester as second level suggester.
-    suggestionFacade.getDictionary().getPrioritiesBySecondLevelSuggester().put(new SecondLevelTokenPhraseSuggester(ngramSuggester, aprioriField, false, maxSuggestionsPerToken, new WhitespaceAnalyzer(), aprioriIndex), 1d);
+    suggestionFacade.getDictionary().getPrioritiesBySecondLevelSuggester()
+          .put(new SecondLevelTokenPhraseSuggester(
+               new TermTokenPhraseSuggester(ngramSuggester, aprioriField,
+               false, maxSuggestionsPerToken, new WhitespaceAnalyzer(),
+               aprioriIndex)), 1d);
   }
 
   public void testBasicTraining() throws Exception {

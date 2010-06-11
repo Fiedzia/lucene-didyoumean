@@ -2,6 +2,7 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.facade.DirectoryIndexFacade;
 import org.apache.lucene.index.facade.IndexFacade;
+import org.apache.lucene.search.didyoumean.secondlevel.token.TermTokenPhraseSuggester;
 import org.apache.lucene.search.didyoumean.secondlevel.token.TokenPhraseSuggester;
 import org.apache.lucene.search.didyoumean.secondlevel.token.SpanNearTokenPhraseSuggester;
 import org.apache.lucene.search.didyoumean.secondlevel.token.ngram.NgramTokenSuggester;
@@ -33,7 +34,8 @@ public class DidYouMean {
       System.exit(1);
     }
     
-    Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_CURRENT, Collections.EMPTY_SET);
+    Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_CURRENT,
+                                             Collections.EMPTY_SET);
     String aprioriField = args[1];
 
     File indexDir = new File(args[0]);
@@ -56,7 +58,9 @@ public class DidYouMean {
       ngramIndex = new DirectoryIndexFacade(new RAMDirectory());
       ngramIndex.indexWriterFactory(null, true).close(); // Initialize empty index
       tokenSuggester = new NgramTokenSuggester(ngramIndex);
-      tokenSuggester.indexDictionary(new TermEnumIterator(aprioriIndex.indexReaderFactory(), aprioriField), 2);
+      tokenSuggester.indexDictionary(
+              new TermEnumIterator(aprioriIndex.indexReaderFactory(),
+                                   aprioriField), 2);
       tokenSuggester.setAccuracy(0.1f);
     } catch (IOException e) {
       e.printStackTrace();
@@ -65,7 +69,9 @@ public class DidYouMean {
 
     TokenPhraseSuggester phraseSuggester = null;
     try {
-      phraseSuggester = new SpanNearTokenPhraseSuggester(tokenSuggester, aprioriField, false, 3, analyzer, aprioriIndex);
+      phraseSuggester = new SpanNearTokenPhraseSuggester(tokenSuggester,
+                                                     aprioriField, false, 3,
+                                                     analyzer, aprioriIndex);
       //phraseSuggester = new TermTokenPhraseSuggester(tokenSuggester, aprioriField, false, 3, analyzer, aprioriIndex);
     } catch (IOException e) {
       e.printStackTrace();
