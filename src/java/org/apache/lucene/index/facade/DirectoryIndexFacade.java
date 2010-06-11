@@ -1,11 +1,4 @@
 package org.apache.lucene.index.facade;
-
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.index.IndexReader;
-
-import java.io.IOException;
 /*
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,6 +14,12 @@ import java.io.IOException;
  *
  */
 
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.index.IndexReader;
+
+import java.io.IOException;
 
 /**
  * @author karl wettin <mailto:karl.wettin@gmail.com>
@@ -36,7 +35,9 @@ public class DirectoryIndexFacade extends IndexFacade {
     this(directory, IndexWriter.MaxFieldLength.LIMITED);
   }
 
-  public DirectoryIndexFacade(Directory directory, IndexWriter.MaxFieldLength mfl) throws IOException {
+  public DirectoryIndexFacade(Directory directory,
+                              IndexWriter.MaxFieldLength mfl)
+                                                            throws IOException {
     this.directory = directory;
     this.mfl = mfl;
   }
@@ -47,7 +48,14 @@ public class DirectoryIndexFacade extends IndexFacade {
   }
 
   @Override
-  public IndexWriterFacade indexWriterFactory(Analyzer analyzer, boolean create) throws IOException {
+  public IndexWriterFacade indexWriterFactory(Analyzer analyzer,
+                                              boolean create)
+                                                            throws IOException {
     return new DirectoryIndexWriterFacade(directory, analyzer, create, mfl);
+  }
+
+  @Override
+  public void close() throws IOException {
+      directory.close();
   }
 }

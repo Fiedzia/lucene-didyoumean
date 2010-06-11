@@ -31,7 +31,10 @@ public class DirectoryIndexWriterFacade extends IndexWriterFacade {
 
   private IndexWriter indexWriter;
 
-  public DirectoryIndexWriterFacade(Directory directory, Analyzer analyzer, boolean create, IndexWriter.MaxFieldLength mfl) throws IOException {
+  public DirectoryIndexWriterFacade(Directory directory, Analyzer analyzer,
+                                    boolean create,
+                                    IndexWriter.MaxFieldLength mfl)
+          throws IOException {
     indexWriter = new IndexWriter(directory, analyzer, create, mfl);
   }
 

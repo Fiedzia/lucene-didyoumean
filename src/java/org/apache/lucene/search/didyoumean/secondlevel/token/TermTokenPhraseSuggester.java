@@ -33,7 +33,8 @@ import java.io.IOException;
  * Date: 2007-okt-23
  * Time: 04:33:29
  */
-public class TermTokenPhraseSuggester extends TokenPhraseSuggester implements SecondLevelSuggester {
+public class TermTokenPhraseSuggester extends TokenPhraseSuggester
+                                      implements SecondLevelSuggester {
 
   private IndexFacade aprioriIndex;
   private IndexReader aprioriReader;
@@ -59,8 +60,14 @@ public class TermTokenPhraseSuggester extends TokenPhraseSuggester implements Se
    * @param aprioriIndex
    * @throws IOException
    */
-  public TermTokenPhraseSuggester(TokenSuggester tokenSuggester, String aprioriIndexField, boolean defaultSuggestMorePopularTokensOnly, int defaultMaxSuggestionsPerToken, Analyzer queryAnalyzer, IndexFacade aprioriIndex) throws IOException {
-    super(tokenSuggester, aprioriIndexField, defaultSuggestMorePopularTokensOnly, defaultMaxSuggestionsPerToken, queryAnalyzer);
+  public TermTokenPhraseSuggester(TokenSuggester tokenSuggester,
+                                  String aprioriIndexField,
+                                  boolean defaultSuggestMorePopularTokensOnly,
+                                  int defaultMaxSuggestionsPerToken,
+                                  Analyzer queryAnalyzer,
+                                  IndexFacade aprioriIndex) throws IOException {
+    super(tokenSuggester, aprioriIndexField, defaultSuggestMorePopularTokensOnly,
+          defaultMaxSuggestionsPerToken, queryAnalyzer);
     this.aprioriIndex = aprioriIndex;
     this.aprioriReader = aprioriIndex.indexReaderFactory();
     this.aprioriSearcher = new IndexSearcher(aprioriReader);
@@ -91,4 +98,10 @@ public class TermTokenPhraseSuggester extends TokenPhraseSuggester implements Se
     return aprioriSearcher;
   }
 
+  @Override
+  public void close() throws IOException {
+    //aprioriIndex.close();
+    //aprioriReader.close();
+    aprioriReader.close();
+  }
 }

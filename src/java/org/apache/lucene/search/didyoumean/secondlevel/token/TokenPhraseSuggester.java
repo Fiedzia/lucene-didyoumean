@@ -14,7 +14,6 @@ package org.apache.lucene.search.didyoumean.secondlevel.token;
  *
  */
 
-
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.TermAttribute;
@@ -30,7 +29,14 @@ import org.apache.lucene.search.didyoumean.SuggestionPriorityQueue;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 /**
  * A layer on top of the single token suggesting {@link TokenSuggester} that enables muti token (phrase) suggestions.
@@ -95,15 +101,26 @@ public abstract class TokenPhraseSuggester {
   private Analyzer queryAnalyzer;
 
   /**
-   * @param tokenSuggester                the single token suggester that backs this phrase suggester
-   * @param aprioriIndexField             the document field used for term frequency inspection at token suggestion level.
+   * @param tokenSuggester                the single token suggester that backs this phrase
+   *                                                     suggester.
+   * @param aprioriIndexField             the document field used for term frequency inspection at
+   *                                                     token suggestion level.
    * @param defaultSuggestMorePopularTokensOnly
-   *                                      if true, at token suggestion level, only suggest tokens that are more popular than the one in the original query.
-   * @param defaultMaxSuggestionsPerToken number of suggestion per token in phrase. there will be (n^tokens in phrase) queries placed on the index to find the best suggestion. e.g. "three token phrase" and n=5 might results in 243 queries on the apriori index.
+   *                                                     if true, at token suggestion level, only suggest tokens that
+   *                                                     are more popular than the one in the original query.
+   * @param defaultMaxSuggestionsPerToken number of suggestion per token in phrase. there
+   *                                                     will be (n^tokens in phrase) queries placed on the index
+   *                                                     to find the best suggestion. e.g. "three token phrase" and
+   *                                                     n=5 might results in 243 queries on the apriori index.
    * @param queryAnalyzer                the analyzer used to tokenize phrases
-   * @throws java.io.IOException if something goes wrong in either the ngram spell checker or in the apriori index
+   * @throws java.io.IOException if something goes wrong in either the ngram spell checker or in
+   *                                                    the apriori index
    */
-  public TokenPhraseSuggester(TokenSuggester tokenSuggester, String aprioriIndexField, boolean defaultSuggestMorePopularTokensOnly, int defaultMaxSuggestionsPerToken, Analyzer queryAnalyzer) throws IOException {
+  public TokenPhraseSuggester(TokenSuggester tokenSuggester,
+                              String aprioriIndexField,
+                              boolean defaultSuggestMorePopularTokensOnly,
+                              int defaultMaxSuggestionsPerToken,
+                              Analyzer queryAnalyzer) throws IOException {
     this.tokenSuggester = tokenSuggester;
     this.aprioriIndexField = aprioriIndexField;
     this.defaultSuggestMorePopularTokensOnly = defaultSuggestMorePopularTokensOnly;
@@ -445,4 +462,9 @@ public abstract class TokenPhraseSuggester {
   public void setQueryAnalyzer(Analyzer queryAnalyzer) {
     this.queryAnalyzer = queryAnalyzer;
   }
+
+  public void close() throws IOException {
+      //queryAnalyzer.close();
+      //tokenSuggester.close();
+    }
 }

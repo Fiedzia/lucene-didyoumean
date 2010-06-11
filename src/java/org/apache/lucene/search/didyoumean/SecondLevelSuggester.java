@@ -29,7 +29,9 @@ public interface SecondLevelSuggester {
   public abstract SuggestionPriorityQueue suggest(String query);
 
   /**
-   * @return true if suggestions from this suggester should be persisted in the dictionary
+   * @return true if suggestions from this suggester should be persisted in the
+   * dictionary.
    */
   public abstract boolean hasPersistableSuggestions();
+    
 }

@@ -371,4 +371,11 @@ public class NgramTokenSuggester implements TokenSuggester {
   public EditDistance editDistanceFactory(String sa) {
     return new Levenshtein(sa);
   }
+
+  public void close() throws IOException {
+
+    ngramIndex.close();
+    ngramReader.close();
+    ngramSearcher.close();
+  }
 }

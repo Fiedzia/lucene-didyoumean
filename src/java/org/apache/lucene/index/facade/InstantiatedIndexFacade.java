@@ -73,4 +73,8 @@ public class InstantiatedIndexFacade extends IndexFacade {
       }
     };
   }
+
+  public void close() throws IOException {
+      ii.close();
+  }
 }

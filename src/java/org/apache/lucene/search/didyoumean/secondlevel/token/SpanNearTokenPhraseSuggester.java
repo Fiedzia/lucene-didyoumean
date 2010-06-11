@@ -44,7 +44,12 @@ public class SpanNearTokenPhraseSuggester extends TokenPhraseSuggester {
     return true;
   }
 
-  public SpanNearTokenPhraseSuggester(TokenSuggester tokenSuggester, String aprioriIndexField, boolean defaultSuggestMorePopularTokensOnly, int defaultMaxSuggestionsPerToken, Analyzer phraseAnalyzer, IndexFacade aprioriIndex) throws IOException {
+  public SpanNearTokenPhraseSuggester(TokenSuggester tokenSuggester,
+                                      String aprioriIndexField,
+                                      boolean defaultSuggestMorePopularTokensOnly,
+                                      int defaultMaxSuggestionsPerToken,
+                                      Analyzer phraseAnalyzer,
+                                      IndexFacade aprioriIndex) throws IOException {
     super(tokenSuggester, aprioriIndexField, defaultSuggestMorePopularTokensOnly, defaultMaxSuggestionsPerToken, phraseAnalyzer);
     this.aprioriIndex = aprioriIndex;
     this.aprioriReader = aprioriIndex.indexReaderFactory();
@@ -70,5 +75,13 @@ public class SpanNearTokenPhraseSuggester extends TokenPhraseSuggester {
 
   protected IndexSearcher getAprioriSearcher() {
     return aprioriSearcher;
+  }
+
+  @Override
+  public void close() throws IOException {
+      super.close();
+      //aprioriIndex.close();
+      aprioriReader.close();
+      aprioriSearcher.close();
   }
 }

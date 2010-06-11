@@ -1,10 +1,4 @@
 package org.apache.lucene.index.facade;
-
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.IndexWriter;
-
-import java.io.IOException;
 /*
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,6 +14,10 @@ import java.io.IOException;
  *
  */
 
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.index.IndexReader;
+
+import java.io.IOException;
 
 /**
  * @author karl wettin <mailto:karl.wettin@gmail.com>
@@ -30,6 +28,10 @@ public abstract class IndexFacade {
 
   public abstract IndexReader indexReaderFactory() throws IOException;
 
-  public abstract IndexWriterFacade indexWriterFactory(Analyzer analyzer, boolean create) throws IOException;
+  public abstract IndexWriterFacade indexWriterFactory(Analyzer analyzer,
+                                                       boolean create)
+                                                             throws IOException;
+
+  public abstract void close() throws IOException;
 
 }

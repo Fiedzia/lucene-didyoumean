@@ -29,5 +29,12 @@ import java.io.IOException;
  *         Time: 06:05:54
  */
 public interface TokenSuggester {
-  public abstract SuggestionPriorityQueue suggest(String queryToken, int n, boolean suggestSelf, IndexReader aprioriIndexReader, String aprioriIndexField, boolean selectMorePopularTokensOnly) throws IOException;
+  public abstract SuggestionPriorityQueue suggest(String queryToken, int n,
+                                                  boolean suggestSelf,
+                                                  IndexReader aprioriIndexReader,
+                                                  String aprioriIndexField,
+                                                  boolean selectMorePopularTokensOnly)
+          throws IOException;
+
+  public abstract void close() throws IOException;
 }
